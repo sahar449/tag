@@ -13,7 +13,6 @@ pipeline{
                 } 
             }
         }
-    }
     stage('terraform apply or destroy'){
         steps {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -30,7 +29,7 @@ pipeline{
                     instance_id=$(terraform show -json | jq -r .values.root_module.resources[0].values.id)
                     sed -i 's/^ *instance_type *= *"t2.micro" *{/&\n  tags = {\n    InstanceId = "'"$instance_id"'" \n  }/' main.tf
                  '''
-        } //   solution: either escape a literal dollar sign "\$5" or bracket the value expression "${5}" @ line 29, column 17.
+        } 
     }
     stage('terraform apply and add the id'){
         steps {
@@ -39,7 +38,8 @@ pipeline{
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
             sh "terraform apply -auto-approve"
+            }
+            }
         }
-      }
     }
 }
