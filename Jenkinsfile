@@ -27,7 +27,7 @@ pipeline{
         steps {
                 sh '''
                     instance_id=$(terraform show -json | jq -r .values.root_module.resources[0].values.id)
-                    sed -i 's/^ *instance_type *= *"t2.micro" *{/&\n  tags = {\n    InstanceId = "'"$instance_id"'" \n  }/' main.tf
+                    sudo sed -i 's/^\( *instance_type *= *"t2.micro" *\)/\1\n  tags = {\n    InstanceId = "'"$instance_id"'" \n  }/' main.tf
                  '''
         } 
     }
@@ -38,7 +38,7 @@ pipeline{
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
             sh "terraform apply -auto-approve"
-            }
+                }
             }
         }
     }
