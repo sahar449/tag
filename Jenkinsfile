@@ -32,7 +32,7 @@ pipeline{
     stage('Add id tag'){
         steps {
             script{
-                if (params.apply_or_destroy == 'destroy'){
+                if (params.apply_or_destroy == 'apply'){
                 def instance_id = sh(script: 'terraform show -json | jq -r .values.root_module.resources[0].values.id', returnStdout: true).trim()
                 sh """sed -i 's/\\(^ *instance_type *= *"t2.micro" *\\)/\\1\\n  tags = {\\n    InstanceId = \\"${instance_id}\\" \\n  }/' main.tf"""
                 }
@@ -42,7 +42,7 @@ pipeline{
     stage('terraform apply and add the id'){
         steps {
             script{
-            if (params.apply_or_destroy == 'destroy'){
+            if (params.apply_or_destroy == 'apply'){
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             credentialsId: 'aws_creds', 
