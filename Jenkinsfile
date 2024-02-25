@@ -28,7 +28,7 @@ pipeline{
         steps {
                 sh '''
                     instance_id=$(terraform show -json | jq -r .values.root_module.resources[0].values.id)
-                    sed -i '/^ *instance_type *= *"t2.micro"/a \ \ tags = {\n    InstanceId = "'"$instance_id"'" \n  }' main.tf
+                    sed -i '/^ *instance_type *= *\"t2.micro\"/a \ \ tags = {\n    InstanceId = '\"$instance_id\"'\n  }' main.tf
                  '''
         } //   solution: either escape a literal dollar sign "\$5" or bracket the value expression "${5}" @ line 29, column 17.
     }
