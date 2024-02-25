@@ -27,10 +27,10 @@ pipeline{
     stage('Add id tag'){
         steps {
             script{
-                sh"""
+                sh """
                     instance_id=$(terraform show -json | jq -r .values.root_module.resources[0].values.id)
                     sed -i '/^ *instance_type *= *\"t2.micro\"/a \ \ tags = {\n    InstanceId = '\"$instance_id\"'\n  }' your_script_file.tf
-                """
+                 """
 
             }
         }
