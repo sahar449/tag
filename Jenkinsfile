@@ -1,6 +1,12 @@
 pipeline{
     agent any
-    
+
+    parameters {
+        choice(
+            name: 'apply_or_destroy',
+            choices: ['apply', 'destroy']
+        )
+    }
     stages{
 
     stage('tf init before ID tag'){
@@ -19,25 +25,31 @@ pipeline{
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh "terraform apply -auto-approve"
+            sh "terraform ${params.apply_or_destroy} -auto-approve"
         }
       }
     }
     stage('Add id tag'){
         steps {
             script{
+                if (params.apply_or_destroy == 'destroy'){
                 def instance_id = sh(script: 'terraform show -json | jq -r .values.root_module.resources[0].values.id', returnStdout: true).trim()
                 sh """sed -i 's/\\(^ *instance_type *= *"t2.micro" *\\)/\\1\\n  tags = {\\n    InstanceId = \\"${instance_id}\\" \\n  }/' main.tf"""
+                }
             }
         } 
     }
     stage('terraform apply and add the id'){
         steps {
+            script{
+            if (params.apply_or_destroy == 'destroy'){
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
             sh "terraform apply -auto-approve"
+                        }
+                    }
                 }
             }
         }
