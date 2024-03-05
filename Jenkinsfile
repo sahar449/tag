@@ -6,8 +6,6 @@ pipeline{
             name: 'apply_or_destroy',
             choices: ['apply', 'destroy']
         )
-        string(name: 'owner', defaultValue: 'your_default_value', description: 'resources owner')
-
     }
     stages{
 
