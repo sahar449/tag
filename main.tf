@@ -12,3 +12,7 @@ resource "aws_instance" "test" {
   }
 }
 
+variable "name" {
+  type    = string
+  default = "default_value"
+}
