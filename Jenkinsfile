@@ -27,7 +27,7 @@ pipeline{
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh "terraform -var "name=${name}" ${params.apply_or_destroy} -auto-approve"
+            sh "terraform -var 'name=${name}' ${params.apply_or_destroy} -auto-approve"
         }
       }
     }
