@@ -40,7 +40,13 @@ pipeline{
 // Escape double quotes in instance_id
 def escaped_instance_id = instance_id.replaceAll('"', '\\\\\\"')
 
-sh """awk '/^ *tags = {/ {getline; sub(\\(^ *InstanceId *= *\\\\\\\\).*, "\\1\\"${escaped_instance_id}\\"")} 1' main.tf > main.tf.tmp && mv main.tf.tmp main.tf"""
+sh """awk '
+  /^ *tags = {/ {
+    getline
+    sub(\\(^ *InstanceId *= *\\\\\\\\).*, "\\1\\"${escaped_instance_id}\\"")
+  }
+  1' main.tf > main.tf.tmp && mv main.tf.tmp main.tf"""
+
 
 
     
