@@ -27,7 +27,7 @@ pipeline{
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh "terraform ${params.apply_or_destroy} -var 'name=${params.name}' -auto-approve"
+            sh "terraform ${params.apply_or_destroy} -auto-approve"
         }
       }
     }
@@ -36,7 +36,7 @@ pipeline{
             script{
                 if (params.apply_or_destroy == 'apply'){
                     def instance_id = sh(script: 'terraform show -json | jq -r .values.root_module.resources[0].values.id', returnStdout: true).trim()
-                    sh """sed -i 's/\\(^ *instance_type *= *"t2.micro" *\\)/\\1\\n  {\\n    InstanceId = \\"${instance_id}\\" \\n  }/' main.tf"""
+                    sh """sed -i 's/\\(^ *instance_type *= *"t2.micro" *\\)/\\1\\n  tags = {\\n    InstanceId = \\"${instance_id}\\" \\n  }/' main.tf"""
                 }
             }
         } 
@@ -49,7 +49,7 @@ pipeline{
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh "terraform apply -auto-approve"
+            sh "terraform apply -var 'name=${params.name}' -auto-approve"
                         }
                     }
                 }
