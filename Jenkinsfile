@@ -6,7 +6,7 @@ pipeline{
             name: 'apply_or_destroy',
             choices: ['apply', 'destroy']
         )
-        string(name: 'add_your_name')
+        string(name: 'name')
 
     }
     stages{
