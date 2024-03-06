@@ -6,6 +6,8 @@ pipeline{
             name: 'apply_or_destroy',
             choices: ['apply', 'destroy']
         )
+        string(name: 'MY_STRING_VARIABLE', defaultValue: 'your_default_value', description: 'Description of the variable')
+
     }
     stages{
 
@@ -25,7 +27,7 @@ pipeline{
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             credentialsId: 'aws_creds', 
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh "terraform ${params.apply_or_destroy} -auto-approve"
+            sh "terraform -var name ${params.apply_or_destroy} -auto-approve"
         }
       }
     }
