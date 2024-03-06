@@ -36,7 +36,10 @@ pipeline{
             script{
                 if (params.apply_or_destroy == 'apply'){
                 def instance_id = sh(script: 'terraform show -json | jq -r .values.root_module.resources[0].values.id', returnStdout: true).trim()
-                sh """sed -i '/^ *tags = {/ {n; s/\\(^ *InstanceId *= *\\\\).*/\\1\\"${instance_id}\\"/}' main.tf"""    
+                // Escape double quotes in instance_id
+                def escaped_instance_id = instance_id.replaceAll('"', '\\\\\\"')
+                sh """sed -i '/^ *tags = {/ {n; s/\\(^ *InstanceId *= *\\\\).*/\\1\\"${escaped_instance_id}\\"/}' main.tf"""
+    
                 }
             }
         } 
