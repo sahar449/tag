@@ -37,7 +37,7 @@ pipeline{
                 if (params.apply_or_destroy == 'apply'){
                     def instance_id = sh(script: 'terraform show -json | jq -r .values.root_module.resources[0].values.id', returnStdout: true).trim()
                     sh """sed -i 's/\\(^ *instance_type *= *"t2.micro" *\\)/\\1\\n  tags = {\\n    InstanceId = \\"${instance_id}\\" \\n  }/' main.tf"""
-                    sh """sed -i 's/\\(^ *instance_type *= *"t2.micro" *\\)/\\1\\n  tags = {\\n    name = \\"${name}\\" \\n  }/' main.tf"""
+                    sh """sed -i 's/\\(^ *instance_type *= *"t2.micro" *\\)/\\1\\n {\\n    name = \\"${name}\\" \\n  }/' main.tf"""
                 }
             }
         } 
