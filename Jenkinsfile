@@ -2,7 +2,7 @@ pipeline{
     agent any
     environment {
         // Define environment variables here
-        terraform = 'terraform 1.6.3'
+        Terraform = 'terraform 1.6.3'
     }
     parameters {
         choice(
