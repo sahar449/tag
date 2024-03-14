@@ -1,6 +1,9 @@
 pipeline{
     agent any
-
+    environment {
+        // Define environment variables here
+        terraform = 'terraform 1.6.3'
+    }
     parameters {
         choice(
             name: 'apply_or_destroy',
