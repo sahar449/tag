@@ -1,8 +1,7 @@
 pipeline{
     agent any
-    environment {
-        // Define environment variables here
-        Terraform = 'terraform'
+    tools {
+      terraform = 'terraform'
     }
     parameters {
         choice(
